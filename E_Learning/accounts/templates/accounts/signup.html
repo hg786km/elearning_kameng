@@ -1,0 +1,47 @@
+{% if error %}
+<!--<script>-->
+<!--    alert('{{ error }}');-->
+<!--</script>-->
+{{error}}
+
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titlexx</title>
+</head>
+<body>
+
+<form method="post" action="">
+    {% csrf_token %}
+    User :
+    <input type="text" name="username" required /><br>
+    Email :
+    <input type="email" name="email" required /><br>
+
+    password :
+    <input type="password" name="password" required /><br>
+
+    Year :<br>
+    <input type="radio" name="year" value="first" />First<br>
+    <input type="radio" name="year" value="second" />Second<br>
+    <input type="radio" name="year" value="third" />Third<br>
+    <input type="radio" name="year" value="fourth" />Fourth<br>
+    <br>
+
+    Branch :<br>
+    <input type="radio" name="branch" value="cse" />Cse<br>
+    <input type="radio" name="branch" value="mnc" />Mnc<br>
+    <input type="radio" name="branch" value="civil" />Civil<br>
+    <input type="radio" name="branch" value="mech" />Mech<br>
+
+
+    <input type="submit" value="signup">
+
+</form>
+<br>
+
+</body>
+</html>

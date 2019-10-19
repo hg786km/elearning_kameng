@@ -1,0 +1,28 @@
+{% if error %}
+<!--<script>-->
+<!--    alert('{{ error }}');-->
+<!--</script>-->
+{{error}}
+
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titlexx</title>
+</head>
+<body>
+
+<form method="post" action="">
+    {% csrf_token %}
+    Email :
+    <input type="email" name="email" required/>
+    password :
+    <input type="password" name="password" required />
+    <input type="submit" value="login" required />
+</form>
+<br>
+<a href="{% url 'accounts:signup' %}">Signup</a>
+</body>
+</html>

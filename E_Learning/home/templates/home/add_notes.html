@@ -1,0 +1,80 @@
+{% if error %}
+<!--<script>-->
+<!--    alert('{{ error }}');-->
+<!--</script>-->
+{{error}}
+
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titlexx</title>
+</head>
+<body>
+<!--{{user}}-->
+<form method="post" action="">
+    {% csrf_token %}
+<!--    Uploaded by :-->
+<!--    <input type="text" name="username" value="{{user.details.username}}" disabled /><br>-->
+    Notes_Title :
+    <input type="text" name="book_name"  required /><br>
+    Tags :<br>
+    <input type="radio" name="tags" value="Maths" />Maths<br>
+    <input type="radio" name="tags" value="Science" />Science<br>
+    <input type="radio" name="tags" value="Physics" />Physics<br>
+    <input type="radio" name="tags" value="Data_Structure" />Data Structure<br>
+    <br>
+<!--    Author of book :-->
+<!--    <input type="text" name="author_name"  required /><br>-->
+    Upload Notes:
+    <input type="file" name="files[]" id="files">
+    <input type="hidden" name="url" id="url">
+    <button type="button" onclick="uploadimage()">Upload</button><br><br>
+
+
+
+
+    <input type="submit" value="publish">
+
+</form>
+<br>
+
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+<script>
+    var config = {
+  apiKey: "AIzaSyAEue4ktaLv-1wqKQgtgkfWJ1Oj6NNW-8U",
+  authDomain: "e-learning-ccbd8.firebaseapp.com",
+  databaseURL: "https://e-learning-ccbd8.firebaseio.com",
+  projectId: "e-learning-ccbd8",
+  storageBucket: "e-learning-ccbd8.appspot.com",
+  messagingSenderId: "1053587965345",
+  appId: "1:1053587965345:web:b97bb311c911183b0d77e0",
+  measurementId: "G-K1YGG2H5VQ"
+};
+  firebase.initializeApp(config);
+  // Get a reference to the storage service, which is used to create references in your storage bucket
+  function uploadimage(){
+  var storage = firebase.storage();
+  var file = document.getElementById("files").files[0];
+  var storageRef = storage.ref();
+  var thisref = storageRef.child(file.name).put(file);
+  thisref.on('state_changed',function(snapshot){
+  console.log("file uplaoded succesfully");
+  },
+  function(error) {
+  },
+  function() {
+  // Upload completed successfully, now we can get the download URL
+  var downloadURL = thisref.snapshot.downloadURL;
+  console.log("got url");
+  document.getElementById("url").value = downloadURL;
+  alert("file uploaded successfully");
+});
+    }
+</script>
+
+</html>

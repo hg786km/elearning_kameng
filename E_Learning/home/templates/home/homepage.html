@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{{user.details.username}}<br>
+
+<a href="{% url 'home:add_notes' user.details.username %}">Add_Book</a><br>
+<a href="{% url 'accounts:logout' %}">logout</a>
+</body>
+</html>
