@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for list_notes,tags,usernames,urls in combine_list  %}
+    {{list_notes}}<br>
+    {{tags}}<br>
+    {{usernames}}<br>
+    <a href="#">{{urls}}</a><br><br>
+{% endfor %}
+</body>
+</html>
