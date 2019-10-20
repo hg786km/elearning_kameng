@@ -224,16 +224,16 @@ def requestbook(request,username,book_title):
             a = a[0]
             a = a['localId']
 
-        except:
-            return render(request, "accounts/signup.html")
+    except:
+        return render(request, "accounts/signup.html")
 
-        req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
-        data = {
-            "req_user": req_user,
-            "username": username,
-        }
-        database.child("requests").child(book_title).set(data, idtoken)
-        return redirect('home:displaybook')
+    req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+    data = {
+        "req_user": req_user,
+        "username": username,
+    }
+    database.child("requests").child(book_title).set(data, idtoken)
+    return redirect('home:displaybook')
       
 def addcourse(request):
     if request.method == 'GET':
