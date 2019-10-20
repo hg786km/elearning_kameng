@@ -1,19 +1,15 @@
+{% extends "base.html" %}
+{% block js %}
 {% if error %}
 <!--<script>-->
 <!--    alert('{{ error }}');-->
 <!--</script>-->
 {{error}}
-
 {% endif %}
+{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Titlexx</title>
-</head>
-<body>
-<!--{{user}}-->
+
+{% block main %}
 <form method="post" enctype="multipart/form-data" class="form-control">
     {% csrf_token %}
 <!--    Uploaded by :-->
@@ -41,9 +37,5 @@
     <input type="submit" value="publish"> 
  </form>   
 <br>
+{% endblock %}
 
-</body>
-
-
-
-</html>

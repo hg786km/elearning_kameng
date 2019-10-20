@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from . import views
-
+from django.views.generic import TemplateView
 app_name = "home"
 
 urlpatterns = [
@@ -20,7 +20,10 @@ urlpatterns = [
     path('course_list/',views.course_list,name='course_list'),
     path('addextcourse/',views.addexternalcourse,name='addextcourse'),
     path('extcourse_list/',views.external_course_list,name='extcourse_list'),
-    re_path(r'(?P<coursename>[\w.@+-]+)/(?P<videoname>[\w.@+-]+)/',views.viewcourse)
+    re_path(r'(?P<coursename>[\w.@+-]+)/(?P<videoname>[\w.@+-]+)/',views.viewcourse),
+    path('courses/',TemplateView.as_view(template_name='home/courses.html')),
+    path('books/',TemplateView.as_view(template_name='home/books.html')),
+    path('notes/',TemplateView.as_view(template_name='home/notes.html')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

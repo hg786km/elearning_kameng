@@ -1,18 +1,15 @@
+{% extends "base.html" %}
+{% block js %}
 {% if error %}
 <!--<script>-->
 <!--    alert('{{ error }}');-->
 <!--</script>-->
 {{error}}
-
 {% endif %}
+{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Titlexx</title>
-</head>
-<body>
+
+{% block main %}
 <!--{{user}}-->
 <form method="post" action="">
     {% csrf_token %}
@@ -29,9 +26,4 @@
 
 </form>
 <br>
-
-</body>
-
-
-
-</html>
+{% endblock %}
