@@ -13,16 +13,13 @@
   <body>
     <form method="post" action="">
     {% csrf_token %}
-<!--    Uploaded by :-->
-<!--    <input type="text" name="username" value="{{user.details.username}}" disabled /><br>-->
     Book Title :
     <input type="text" name="book_name"  required /><br>
-    Tags :<br>
-    <input type="radio" name="tags" value="Maths" />Maths<br>
-    <input type="radio" name="tags" value="Science" />Science<br>
-    <input type="radio" name="tags" value="Physics" />Physics<br>
-    <input type="radio" name="tags" value="Data_Structure" />Data Structure<br>
-    <br>
+
+      Upload Books:
+        <input type="file" name="url" id="files" required />
+        <br>
+
     <input type="submit" value="Add">
 
 </form>
