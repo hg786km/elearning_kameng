@@ -68,7 +68,9 @@ def login(request):
     else:
         email = request.POST.get('email')
         password = request.POST.get('password')
+        print("hello 1")
         try:
+            print("hello 1")
             user = authe.sign_in_with_email_and_password(email, password)
         except :
             return render(request, "accounts/login.html", {'error':'invalid credentials'})

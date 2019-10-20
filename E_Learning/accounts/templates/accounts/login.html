@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base1.html" %}
 {% block js %}
 {% if error %}
 <!--<script>-->
@@ -10,22 +10,19 @@
 
 
 {% block main %}
-<form class="text-center border border-light p-5" action="" method = "post">
-    {% csrf_token %} 
-    <p class="h4 mb-4">Sign in</p>
 
-    <!-- Email -->
-    <input type="email" id="email" class="form-control mb-4" placeholder="E-mail" required/>
-
-    <!-- Password -->
-    <input type="password" id="password" class="form-control mb-4" placeholder="Password" required/>
-
-
-    <!-- Sign in button -->
-    <input class="btn btn-info btn-block my-4" type="submit" value="login" required/ ></input>
-
+<form method="post" class="text-center border border-light p-5" action="">
+    {% csrf_token %}
+    Email :
+    <input type="email" class="form-control mb-4" name="email" required/>
+    password :
+    <input type="password" class="form-control mb-4" name="password" required />
+    <input type="submit" lass="btn btn-info btn-block my-4" value="login" required />
 
 </form>
+
+
+
     <!-- Register -->
     <p>Not a member?
         <a href="{% url 'accounts:signup' %}">Register</a>

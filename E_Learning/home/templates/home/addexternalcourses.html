@@ -10,20 +10,20 @@
 
 
 {% block main %}
-    <form method="post" action="">
+    <form method="post" action=""   class="text-center border border-light p-5" >
     {% csrf_token %}
 <!--    Uploaded by :-->
 <!--    <input type="text" name="username" value="{{user.details.username}}" disabled /><br>-->
     Book Title :
-    <input type="text" name="course_name"  required /><br>
-    <input type="text" name="link"  required /><br>
+    <input type="text" class="form-control mb-4"  name="course_name"  required /><br>
+    <input type="text" class="form-control mb-4" name="link"  required /><br>
     Tags :<br>
     <input type="radio" name="tags" value="Maths" />Maths<br>
     <input type="radio" name="tags" value="Science" />Science<br>
     <input type="radio" name="tags" value="Physics" />Physics<br>
     <input type="radio" name="tags" value="Data_Structure" />Data Structure<br>
     <br>
-    <input type="submit" value="Add">
+    <input type="submit" class="form-control mb-4" value="Add">
 
 </form>
 <br>
