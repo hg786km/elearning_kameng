@@ -1,6 +1,8 @@
-from django.urls import path
+
+from django.urls import path, re_path
 from django.conf.urls.static import static
 from django.conf import settings
+
 from . import views
 
 app_name = "home"
@@ -14,7 +16,14 @@ urlpatterns = [
     path('displaybook/',views.displaybook,name='displaybook'),
     path('(?P<username>[\w.@+-]+)/(?P<book_title>[\w.@+-]+)/requestbook/',views.requestbook, name='requestbook'),
     path('viewrequests/',views.viewrequests, name='viewrequests'),
+    path('addcourse/',views.addcourse,name='addcourse'),
+    path('course_list/',views.course_list,name='course_list'),
+    path('addextcourse/',views.addexternalcourse,name='addextcourse'),
+    path('extcourse_list/',views.external_course_list,name='extcourse_list'),
+    re_path(r'(?P<coursename>[\w.@+-]+)/(?P<videoname>[\w.@+-]+)/',views.viewcourse)
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
 
 

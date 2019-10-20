@@ -23,6 +23,7 @@ def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
 
+
 def add_notes(request):
     if request.method == 'GET':
         return render(request, "home/add_notes.html")
@@ -188,6 +189,7 @@ def addbook(request):
         database.child("books").child(bookname).set(data,idtoken)
         return render(request,"home/homepage.html")
 
+
 def displaybook(request):
     books = database.child('books').shallow().get().val()
 
@@ -216,21 +218,135 @@ def displaybook(request):
 
 def requestbook(request,username,book_title):
     try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+
+        except:
+            return render(request, "accounts/signup.html")
+
+        req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        data = {
+            "req_user": req_user,
+            "username": username,
+        }
+        database.child("requests").child(book_title).set(data, idtoken)
+        return redirect('home:displaybook')
+      
+def addcourse(request):
+    if request.method == 'GET':
+        return render(request, "home/addcourse.html")
+
+    else:
+        print("falak")
+        course_name = request.POST.get('course_name')
+        video_name = request.POST.get('video_name')
+        tags = request.POST.get('tags')
+        upload=request.FILES.get('url')
+        print(upload)
+
+
+        try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+            # a contains local id
+        except:
+            return render(request, "accounts/login.html")
+
+        storage = firebase.storage()
+        
+        storage_path = "videos/"+course_name+"/"+video_name+".mp4"
+        storage.child(storage_path).put(upload,idtoken)
+        url = storage.child(storage_path).get_url(idtoken)
+
+        username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        #print(username)
+        data = {
+            "tags": tags,
+            "url": url,
+            "username": username,
+        }
+
+        database.child('course').child(course_name).child(video_name).set(data, idtoken)
+        return render(request, "home/addcourse.html")
+
+def course_list(request):
+    courses = database.child('course').shallow().get().val()
+    print(courses)
+    list_courses = [*courses]
+    print(list_courses)
+    link_lists = []
+    for i in list_courses:
+        videos = database.child('course').child(i).shallow().get().val()
+        videos1=[*videos]
+        link = "/stuff/"+i+"/"+videos1[0]
+        link_lists.append(link)
+    print(link_lists)
+    combine_list = zip(list_courses,link_lists)
+    return render(request, "home/display_courses.html", {'combine_list':combine_list})
+
+def viewcourse(request,coursename,videoname):
+    try:
         idtoken = request.session['uid']
         a = authe.get_account_info(idtoken)
         a = a['users']
         a = a[0]
         a = a['localId']
+        # a contains local id
     except:
-        return render(request, "accounts/signup.html")
+        return render(request, "accounts/login.html")
+    videos = database.child('course').child(coursename).shallow().get(idtoken).val()
+    videos1=[*videos]
+    link_list=[]
+    for i in videos1:
+        link = "/stuff"+"/"+coursename+"/"+i
+        link_list.append(link)
 
-    req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
-    data = {
-        "req_user": req_user,
-        "username": username,
-    }
-    database.child("requests").child(book_title).set(data, idtoken)
-    return redirect('home:displaybook')
+    url= database.child('course').child(coursename).child(videoname).child('url').get(idtoken).val()
+
+    combine_list = zip(videos1,link_list)
+    return render(request, "home/video_page.html", {'combine_list':combine_list,"coursetitle":coursename,"videotitle":videoname,"url":url})
+
+def addexternalcourse(request):
+    if request.method == 'GET':
+        return render(request, "home/addexternalcourses.html")
+
+    else:
+        print("falak")
+        course_name = request.POST.get('course_name')
+        link = request.POST.get('link')
+        tags = request.POST.get('tags')
+
+
+        try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+            # a contains local id
+        except:
+            return render(request, "accounts/login.html")
+
+        username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        #print(username)
+        data = {
+            "tags": tags,
+            "link": link,
+            "username": username,
+        }
+
+        database.child('externalcourses').child(course_name).set(data, idtoken)
+        return render(request, "home/addexternalcourses.html")
+
+
+
+    
 
 def viewrequests(request):
     try:
@@ -250,3 +366,27 @@ def viewrequests(request):
     print(all_requested_users)
     combine_list = zip(all_requested_users)
     return render(request, "home/viewrequests.html", {'combine_list': combine_list})
+
+
+def external_course_list(request):  
+    try:
+        idtoken = request.session['uid']
+        a = authe.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+        # a contains local id
+    except:
+        return render(request, "accounts/login.html")
+    courses = database.child('externalcourses').shallow().get(idtoken).val()
+    print(courses)
+    list_courses = [*courses]
+    print(list_courses)
+    link_lists = []
+    
+    for i in list_courses:
+        link = database.child('externalcourses').child(i).child('link').get(idtoken).val()
+        link_lists.append(link)
+    print(link_lists)
+    combine_list = zip(list_courses,link_lists)
+    return render(request, "home/externalcourses.html", {'combine_list':combine_list})

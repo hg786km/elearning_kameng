@@ -1,0 +1,49 @@
+{% if error %}
+<!--<script>-->
+<!--    alert('{{ error }}');-->
+<!--</script>-->
+{{error}}
+
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titlexx</title>
+</head>
+<body>
+<!--{{user}}-->
+<form method="post" enctype="multipart/form-data" class="form-control">
+    {% csrf_token %}
+<!--    Uploaded by :-->
+<!--    <input type="text" name="username" value="{{user.details.username}}" disabled /><br>-->
+    Course_Title :
+    <input type="text" name="course_name"  required /><br>
+    Video_Title :
+    <input type="text" name="video_name"  required /><br>
+    Tags :<br>
+    <input type="radio" name="tags" value="Maths" />Maths<br>
+    <input type="radio" name="tags" value="Science" />Science<br>
+    <input type="radio" name="tags" value="Physics" />Physics<br>
+    <input type="radio" name="tags" value="Data_Structure" />Data Structure<br>
+    <br>
+<!--    Author of book :-->
+<!--    <input type="text" name="author_name"  required /><br>-->
+    Upload Video:
+
+        <input type="file" name="url" accept=".mp4" >
+<!--        <input type="hidden" name="url" id="url">-->
+<!--        <button type="button" onclick="uploadimage()">Upload</button><br><br>-->
+        <br>
+
+
+    <input type="submit" value="publish"> 
+ </form>   
+<br>
+
+</body>
+
+
+
+</html>
