@@ -54,7 +54,6 @@ def signup(request):
 def login(request):
 
     if request.method == 'GET':
-        print(2)
         return render(request, "accounts/login.html")
 
     else:
