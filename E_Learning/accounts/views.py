@@ -60,10 +60,11 @@ def signup(request):
 def login(request):
 
     if request.method == 'GET':
+
         if user_authenticated(request):
             user = currentUser(request)
             return render(request, "home/homepage.html",{"user":user})
-        return render(request, "accounts/login.html")
+
 
     else:
         email = request.POST.get('email')

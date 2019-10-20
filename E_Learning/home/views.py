@@ -25,6 +25,7 @@ def dashboard(request):
 
 
 @login_required
+
 def add_notes(request):
     if request.method == 'GET':
         return render(request, "home/add_notes.html")
@@ -178,6 +179,8 @@ def addbook(request):
 
         username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
         email = database.child("users").child(a).child("details").child("email").get(idtoken).val()
+        tags = database.child("users").child(a).child("details").child("admin").get(idtoken).val()
+        print(tags)
         data={
             "tags":tags,
             "username":username,
@@ -189,7 +192,9 @@ def addbook(request):
         database.child("books").child(bookname).set(data,idtoken)
         return render(request,"home/homepage.html")
 
+
 @login_required
+
 def displaybook(request):
     books = database.child('books').shallow().get().val()
 
@@ -215,8 +220,13 @@ def displaybook(request):
 
     combine_list = zip(list_books,tags,usernames,status,emails,approved)
     return render(request, "home/display_books.html", {'combine_list':combine_list})
+
+
+j=1
+
+
 @login_required
-def requestbook(request,username,book_title):
+def requestbook(request,username,book_title,status):
     try:
             idtoken = request.session['uid']
             a = authe.get_account_info(idtoken)
@@ -229,10 +239,14 @@ def requestbook(request,username,book_title):
 
     req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
     data = {
+        'owner':username,
+        'status':status,
         "req_user": req_user,
-        "username": username,
+        "book_title": book_title,
     }
-    database.child("requests").child(book_title).set(data, idtoken)
+    global j
+    j = j+1
+    database.child("requests").child(j).set(data, idtoken)
     return redirect('home:displaybook')
 @login_required   
 def addcourse(request):
@@ -291,29 +305,22 @@ def course_list(request):
     return render(request, "home/display_courses.html", {'combine_list':combine_list})
 @login_required
 def viewcourse(request,coursename,videoname):
+
     try:
         idtoken = request.session['uid']
         a = authe.get_account_info(idtoken)
         a = a['users']
         a = a[0]
         a = a['localId']
-        # a contains local id
     except:
-        return render(request, "accounts/login.html")
-    videos = database.child('course').child(coursename).shallow().get(idtoken).val()
-    videos1=[*videos]
-    link_list=[]
-    for i in videos1:
-        link = "/stuff"+"/"+coursename+"/"+i
-        link_list.append(link)
-
-    url= database.child('course').child(coursename).child(videoname).child('url').get(idtoken).val()
-
+        return render(request, "accounts/signup.html")
     combine_list = zip(videos1,link_list)
     return render(request, "home/video_page.html", {'combine_list':combine_list,"coursetitle":coursename,"videotitle":videoname,"url":url})
+
+    
 @login_required
 def addexternalcourse(request):
-    if request.method == 'GET':
+   if request.method == 'GET':
         return render(request, "home/addexternalcourses.html")
 
     else:
@@ -344,29 +351,7 @@ def addexternalcourse(request):
         database.child('externalcourses').child(course_name).set(data, idtoken)
         return render(request, "home/addexternalcourses.html")
 
-
-
-    
-@login_required
-def viewrequests(request):
-    try:
-        idtoken = request.session['uid']
-        a = authe.get_account_info(idtoken)
-        a = a['users']
-        a = a[0]
-        a = a['localId']
-    except:
-        return render(request, "accounts/signup.html")
-
-    all_requested_users = database.child("requests").child(a).shallow().get().val()
-    print(all_requested_users)
-    if all_requested_users is None:
-        return render(request, "home/viewrequests.html", {'message': 'no requests'})
-    all_requested_users = [*all_requested_users]
-    print(all_requested_users)
-    combine_list = zip(all_requested_users)
-    return render(request, "home/viewrequests.html", {'combine_list': combine_list})
-
+ 
 @login_required
 def external_course_list(request):  
     try:
@@ -389,4 +374,147 @@ def external_course_list(request):
         link_lists.append(link)
     print(link_lists)
     combine_list = zip(list_courses,link_lists)
-    return render(request, "home/externalcourses.html", {'combine_list':combine_list})
+    return render(request, "home/externalcourses.html", {'combine_list':combine_list})        
+
+    
+
+def view_requests(request):
+    try:
+        idtoken = request.session['uid']
+        a = authe.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+    except:
+        return render(request, "accounts/signup.html")
+
+    all_requests = database.child("requests").shallow().get().val()
+    print(all_requests)
+    if all_requests is None:
+        return render(request, "home/viewrequests.html", {'message': 'no requests'})
+
+    all_requests_list = [*all_requests]
+    print(all_requests_list)
+    my_requests = []
+    username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+    print(username)
+    for i in all_requests_list:
+        if username == database.child('requests').child(i).child('owner').get().val():
+            my_requests.append(i)
+    print(my_requests)
+
+
+    req_user = []
+    status = []
+    book_title = []
+    req_id = []
+    for i in my_requests:
+        req_user1 = database.child('requests').child(i).child('req_user').get().val()
+        req_user.append(req_user1)
+        status1 = database.child('requests').child(i).child('status').get().val()
+        status.append(status1)
+        book_title1 = database.child('requests').child(i).child('book_title').get().val()
+        book_title.append(book_title1)
+        req_id.append(i)
+    print(req_user)
+    print(book_title)
+    combine_list = zip(req_user,status,book_title,req_id)
+    return render(request, "home/viewrequests.html", {'combine_list': combine_list, 'username':username})
+
+
+k = 0;
+
+def updatet(request,book_title,req_id,req_user,username):
+
+
+    try:
+        idtoken = request.session['uid']
+        a = authe.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+    except:
+        return render(request, "accounts/signup.html")
+
+    database.child("books").child(book_title).update({"status": 0})
+    database.child("requests").child(req_id).remove()
+    reply = str("Your approval for book is accepted ") + str(username)
+    global k
+    k = k+1
+    data = {
+        "reply" : reply,
+        "to" : req_user,
+        "from": username,
+    }
+    database.child("notifications").child(k).set(data, idtoken)
+    return redirect("home:view_requests")
+
+def updatef(request,book_title,req_id,req_user,username):
+    try:
+        idtoken = request.session['uid']
+        a = authe.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+    except:
+        return render(request, "accounts/signup.html")
+
+    database.child("requests").child(req_id).remove()
+    reply = str("Your approval for book is declined ") + str(username)
+    global k
+    k = k + 1
+    data = {
+        "reply": reply,
+        "to": req_user,
+        "from": username,
+    }
+    database.child("notifications").child(k).set(data, idtoken)
+    return redirect("home:view_requests")
+
+    
+def notifications(request):
+
+    try:
+        idtoken = request.session['uid']
+        a = authe.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+    except:
+        return render(request, "accounts/signup.html")
+
+    all_reply = database.child("notifications").shallow().get().val()
+    print(all_reply)
+    if all_reply is None:
+        return render(request, "home/viewrequests.html", {'message': 'no requests'})
+
+    all_reply_list = [*all_reply]
+    print(all_reply)
+    my_reply = []
+    n_id = []
+    username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+    print(username)
+    for i in all_reply_list:
+        if username == database.child('notifications').child(i).child('to').get().val():
+            my_reply.append(i)
+
+    print(my_reply)
+
+
+    users = []
+    for i in my_reply:
+        users1 = database.child('notifications').child(i).child('from').get().val()
+        users.append(users1)
+        n_id.append(i)
+
+    mystr = []
+    for i in my_reply:
+        users1 = database.child('notifications').child(i).child('reply').get().val()
+        mystr.append(users1)
+
+    combine_list = zip(my_reply, users,n_id,mystr)
+    return render(request, "home/notifications.html", {'combine_list': combine_list})
+
+def n_delete(request,n_id):
+    database.child("notifications").child(n_id).remove()
+    return redirect("home:notifications")

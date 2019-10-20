@@ -8,7 +8,10 @@
 {% endif %}
 {% endblock %}
 
+
+
 {% block css %}
+
 <style>
 * {
   box-sizing: border-box;
@@ -49,8 +52,8 @@
 
 {% block main %}
 <div class="container">
-    <p><h1>NOTES:</h1></p>
-    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+    <p><h1>BOOKS:</h1></p>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for book_title.." title="Type in a name">
   <table class="table table-hover" id="myTable">
     <thead>
       <tr class="header">
@@ -60,6 +63,7 @@
           <th>Status</th>
         <th>Available</th>
           <th>Contact</th>
+          <th>Request</th>
       </tr>
     </thead>
     <tbody>
@@ -69,18 +73,26 @@
            <td>{{tags}}</td>
         <td>{{usernames}}</td>
         <td>{{status}}</td>
-          {% if tags == 'General' and approved == 0 %}
+          {% if tags == 'General' %}
+            <td>(To be Approved)</td>
+          {% elif status == 0 %}
             <td>(To be Approved)</td>
          {% else %}
             <td>  <a href = {{urls}}>Download</td>
           {% endif %}
         <td>
             {% if status %}
-                <a href="#">{{emails}}</a>
+                {{emails}}
             {% else %}
                 Not Available
             {% endif %}
-
+        </td>
+          <td>
+            {% if status %}
+              <a href="{% url 'home:requestbook'  usernames list_books status %}"> Request</a>
+            {% else %}
+                Not Available
+            {% endif %}
         </td>
 
       </tr>
@@ -101,11 +113,14 @@ function myFunction() {
   filter = input.value.toUpperCase();
   table = document.getElementById("myTable");
   tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
+  for (i = 0; i < tr.length; i++)
+  {
     td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
+    if (td)
+    {
       txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      if (txtValue.toUpperCase().indexOf(filter) > -1)
+       {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
