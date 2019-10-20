@@ -1,36 +1,36 @@
+{% extends "base.html" %}
+{% block js %}
 {% if error %}
 <!--<script>-->
 <!--    alert('{{ error }}');-->
 <!--</script>-->
 {{error}}
-
 {% endif %}
+{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Titlexx</title>
-</head>
-<body>
 
-<form method="post" action="">
+{% block main %}
+<!--{{user}}-->
+<form method="post"  class="text-center border border-light p-5" action="">
     {% csrf_token %}
     Notes_Title :
-    <input type="text" name="notes_name"  required /><br>
+    <input type="text" name="notes_name" class="form-control mb-4" required /><br>
     <br>
 
     Upload Notes:
-        <input type="file" name="url" id="files" required />
+
+
+        <input type="file" name="url" class="form-control mb-4" accept = ".pdf">
+
         <br>
 
 
-    <input type="submit" value="publish">
+    <input type="submit" class="form-control mb-4" value="publish">
 
 </form>
 <br>
 
-</body>
+{% endblock %}
 
 
-</html>
+

@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-  <title>Library</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<!--        <script type="text/javascript" src="home/search.js"></script>-->
-<!--    <link rel="stylesheet" href="home/search.css">-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+{% extends "base.html" %}
+{% block js %}
+{% if error %}
+<!--<script>-->
+<!--    alert('{{ error }}');-->
+<!--</script>-->
+{{error}}
+{% endif %}
+{% endblock %}
 
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% block css %}
+
 <style>
 * {
   box-sizing: border-box;
@@ -49,11 +48,9 @@
   background-color: #f1f1f1;
 }
 </style>
+{% endblock %}
 
-
-</head>
-<body>
-
+{% block main %}
 <div class="container">
     <p><h1>BOOKS:</h1></p>
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for book_title.." title="Type in a name">
@@ -103,6 +100,11 @@
     </tbody>
   </table>
 </div>
+{% endblock %}
+
+
+
+{% block js2 %}
 <script>
 
 function myFunction() {
@@ -127,5 +129,4 @@ function myFunction() {
   }
 }
 </script>
-</body>
-</html>
+{% endblock %}

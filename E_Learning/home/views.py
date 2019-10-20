@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 import pyrebase
 from django.contrib import auth
-
+from functions import *
+from decorators import *
 
 
 config = {
@@ -22,6 +23,8 @@ database = firebase.database()
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
+
+@login_required
 
 def add_notes(request):
     if request.method == 'GET':
@@ -63,7 +66,7 @@ def add_notes(request):
         return render(request, "home/homepage.html")
 
 
-
+@login_required
 def view_notes(request):
     notes = database.child('Notes').shallow().get().val()
     print(notes)
@@ -89,9 +92,8 @@ def view_notes(request):
     combine_list = zip(list_notes,tags,usernames,urls,approved)
     return render(request, "home/display_notes.html", {'combine_list':combine_list})
 
+@login_required
 def add_club(request):
-
-
         if request.method == 'GET':
             return render(request, "home/add_club.html")
 
@@ -129,7 +131,7 @@ def add_club(request):
 
             database.child('Clubs').child(tags).set(data, idtoken)
             return render(request, "home/homepage.html")
-
+@login_required
 def display_clubs(request):
     clubs = database.child('Clubs').shallow().get().val()
     print(clubs)
@@ -150,7 +152,7 @@ def display_clubs(request):
     print(usernames)
     combine_list = zip(list_clubs,usernames,urls,approved)
     return render(request, "home/display_clubs.html", {'combine_list':combine_list})
-
+@login_required
 def addbook(request):
     if request.method =='GET':
         return render(request,"home/addbook.html")
@@ -190,6 +192,9 @@ def addbook(request):
         database.child("books").child(bookname).set(data,idtoken)
         return render(request,"home/homepage.html")
 
+
+@login_required
+
 def displaybook(request):
     books = database.child('books').shallow().get().val()
 
@@ -216,9 +221,91 @@ def displaybook(request):
     combine_list = zip(list_books,tags,usernames,status,emails,approved)
     return render(request, "home/display_books.html", {'combine_list':combine_list})
 
+
 j=1
 
+
+@login_required
 def requestbook(request,username,book_title,status):
+    try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+
+    except:
+        return render(request, "accounts/signup.html")
+
+    req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+    data = {
+        'owner':username,
+        'status':status,
+        "req_user": req_user,
+        "book_title": book_title,
+    }
+    global j
+    j = j+1
+    database.child("requests").child(j).set(data, idtoken)
+    return redirect('home:displaybook')
+@login_required   
+def addcourse(request):
+    if request.method == 'GET':
+        return render(request, "home/addcourse.html")
+
+    else:
+        print("falak")
+        course_name = request.POST.get('course_name')
+        video_name = request.POST.get('video_name')
+        tags = request.POST.get('tags')
+        upload=request.FILES.get('url')
+        print(upload)
+
+
+        try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+            # a contains local id
+        except:
+            return render(request, "accounts/login.html")
+
+        storage = firebase.storage()
+        
+        storage_path = "videos/"+course_name+"/"+video_name+".mp4"
+        storage.child(storage_path).put(upload,idtoken)
+        url = storage.child(storage_path).get_url(idtoken)
+
+        username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        #print(username)
+        data = {
+            "tags": tags,
+            "url": url,
+            "username": username,
+        }
+
+        database.child('course').child(course_name).child(video_name).set(data, idtoken)
+        return render(request, "home/addcourse.html")
+@login_required
+def course_list(request):
+    courses = database.child('course').shallow().get().val()
+    print(courses)
+    list_courses = [*courses]
+    print(list_courses)
+    link_lists = []
+    for i in list_courses:
+        videos = database.child('course').child(i).shallow().get().val()
+        videos1=[*videos]
+        link = "/stuff/"+i+"/"+videos1[0]
+        link_lists.append(link)
+    print(link_lists)
+    combine_list = zip(list_courses,link_lists)
+    return render(request, "home/display_courses.html", {'combine_list':combine_list})
+@login_required
+def viewcourse(request,coursename,videoname):
+
     try:
         idtoken = request.session['uid']
         a = authe.get_account_info(idtoken)
@@ -227,20 +314,69 @@ def requestbook(request,username,book_title,status):
         a = a['localId']
     except:
         return render(request, "accounts/signup.html")
+    combine_list = zip(videos1,link_list)
+    return render(request, "home/video_page.html", {'combine_list':combine_list,"coursetitle":coursename,"videotitle":videoname,"url":url})
+
+    
+@login_required
+def addexternalcourse(request):
+   if request.method == 'GET':
+        return render(request, "home/addexternalcourses.html")
+
+    else:
+        print("falak")
+        course_name = request.POST.get('course_name')
+        link = request.POST.get('link')
+        tags = request.POST.get('tags')
 
 
-    req_user = database.child("users").child(a).child("details").child("username").get(idtoken).val()
-    data = {
-        "owner": username,
-        "req_user": req_user,
-        "status":status,
-        "book_title":book_title,
-    }
-    global j
-    j = j + 1
-    database.child("requests").child(j).set(data, idtoken)
+        try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+            # a contains local id
+        except:
+            return render(request, "accounts/login.html")
 
-    return redirect('home:displaybook')
+        username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        #print(username)
+        data = {
+            "tags": tags,
+            "link": link,
+            "username": username,
+        }
+
+        database.child('externalcourses').child(course_name).set(data, idtoken)
+        return render(request, "home/addexternalcourses.html")
+
+ 
+@login_required
+def external_course_list(request):  
+    try:
+        idtoken = request.session['uid']
+        a = authe.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+        # a contains local id
+    except:
+        return render(request, "accounts/login.html")
+    courses = database.child('externalcourses').shallow().get(idtoken).val()
+    print(courses)
+    list_courses = [*courses]
+    print(list_courses)
+    link_lists = []
+    
+    for i in list_courses:
+        link = database.child('externalcourses').child(i).child('link').get(idtoken).val()
+        link_lists.append(link)
+    print(link_lists)
+    combine_list = zip(list_courses,link_lists)
+    return render(request, "home/externalcourses.html", {'combine_list':combine_list})        
+
+    
 
 def view_requests(request):
     try:
@@ -287,7 +423,9 @@ def view_requests(request):
 
 
 k = 0;
+
 def updatet(request,book_title,req_id,req_user,username):
+
 
     try:
         idtoken = request.session['uid']
@@ -321,7 +459,6 @@ def updatef(request,book_title,req_id,req_user,username):
     except:
         return render(request, "accounts/signup.html")
 
-
     database.child("requests").child(req_id).remove()
     reply = str("Your approval for book is declined ") + str(username)
     global k
@@ -334,7 +471,9 @@ def updatef(request,book_title,req_id,req_user,username):
     database.child("notifications").child(k).set(data, idtoken)
     return redirect("home:view_requests")
 
+    
 def notifications(request):
+
     try:
         idtoken = request.session['uid']
         a = authe.get_account_info(idtoken)
