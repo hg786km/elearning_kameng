@@ -49,9 +49,71 @@ def checkin(request):
             return render(request, "accounts/login.html", {'error': 'oops login first'})
 
 
-def add_notes(request, user):
-    if request.method == 'GET':
-        return render(request, "home/add_notes.html",{'user':user})
 
-    else: pass
+def add_notes(request):
+    if request.method == 'GET':
+        return render(request, "home/add_notes.html")
+
+    else:
+        print("falak")
+        notes_name = request.POST.get('notes_name')
+        tags = request.POST.get('tags')
+        url = request.POST.get('url')
+        print(url)
+        upload=request.FILES.get('url')
+        print(upload)
+
+
+        try:
+            idtoken = request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a = a[0]
+            a = a['localId']
+            # a contains local id
+        except:
+            return render(request, "accounts/login.html")
+
+        storage = firebase.storage()
+        
+        storage_path = "images/"+notes_name
+        storage.child(storage_path).put(upload,idtoken)
+        url = storage.child(storage_path).get_url(idtoken)
+        username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        #print(username)
+        data = {
+            "tags": tags,
+            "url": url,
+            "username": username,
+        }
+
+        database.child('Notes').child(notes_name).set(data, idtoken)
+        return render(request, "home/homepage.html")
+
+def addbook(request):
+    if request.method =='GET':
+        return render(request,"home/addbook.html")
+    else:
+        bookname=request.POST.get('book_name')
+        tags=request.POST.get("tags")
+        try:
+            idtoken=request.session['uid']
+            a = authe.get_account_info(idtoken)
+            a = a['users']
+            a=a[0]
+            a=a['localId']
+        except:
+            return render(request,"accounts/signup.html")
+        username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
+        data={
+            "tags":tags,
+            "username":username,
+            "status": "1",
+        }
+        database.child("books").child(bookname).set(data,idtoken)
+        return render(request,"home/homepage.html")
+
+
+
+
 

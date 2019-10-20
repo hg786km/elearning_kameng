@@ -63,7 +63,7 @@ def login(request):
             return render(request, "accounts/login.html", {'error':'invalid credentials'})
 
 
-        session_id = user['localId'] # use localId also
+        session_id = user['idToken'] # use localId also
         # uid is name of session
         request.session['uid'] = str(session_id)
 

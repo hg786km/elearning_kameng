@@ -7,7 +7,8 @@
 <body>
 {{user.details.username}}<br>
 
-<a href="{% url 'home:add_notes' user.details.username %}">Add_Book</a><br>
+<a href="{% url 'home:add_notes' %}">Add_Notes</a><br>
+
 <a href="{% url 'accounts:logout' %}">logout</a>
 </body>
 </html>
