@@ -33,6 +33,7 @@ def signup(request):
         username = request.POST.get('username')
         year = request.POST.get('year')
         branch = request.POST.get('branch')
+        admin = request.POST.get('admin')
         try:
             user = authe.create_user_with_email_and_password(email,password)
         except:
@@ -43,6 +44,8 @@ def signup(request):
                 "year": year,
                 "branch":branch,
                 "detail":"1",
+                "email":email,
+                "admin": admin,
                 }
         database.child("users").child(uid).child("details").set(data)
         return redirect('accounts:login')

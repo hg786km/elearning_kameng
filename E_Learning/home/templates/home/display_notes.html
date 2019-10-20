@@ -63,19 +63,24 @@
         <th>Title</th>
         <th>Tag</th>
         <th>User</th>
-        <th>Link</th>
           <th>Download</th>
       </tr>
     </thead>
     <tbody>
-{% for list_notes,tags,usernames,urls in combine_list  %}
+{% for list_notes,tags,usernames,urls,approved in combine_list  %}
       <tr>
           <td>{{tags}}</td>
         <td>{{list_notes}}</td>
 
-        <td>{{usernames}}</td>
-        
-          <td><a href="{{urls}}">Download</td>
+
+        {% if tags == 'General' and approved == 0 %}
+            <td>{{usernames}}</td>
+            <td>(To be Approved)</td>
+         {% else %}
+            <td>{{usernames}}</td>
+            <td>  <a href = {{urls}}>Download</td>
+          {% endif %}
+
       </tr>
 {% endfor %}
     </tbody>
