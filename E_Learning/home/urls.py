@@ -1,8 +1,6 @@
-
-from django.urls import path, re_path
+from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
-
 from . import views
 
 app_name = "home"
@@ -14,16 +12,13 @@ urlpatterns = [
     path('display_clubs/', views.display_clubs, name='display_clubs'),
     path('addbook/',views.addbook,name='addbook'),
     path('displaybook/',views.displaybook,name='displaybook'),
-    path('(?P<username>[\w.@+-]+)/(?P<book_title>[\w.@+-]+)/requestbook/',views.requestbook, name='requestbook'),
-    path('viewrequests/',views.viewrequests, name='viewrequests'),
-    path('addcourse/',views.addcourse,name='addcourse'),
-    path('course_list/',views.course_list,name='course_list'),
-    path('addextcourse/',views.addexternalcourse,name='addextcourse'),
-    path('extcourse_list/',views.external_course_list,name='extcourse_list'),
-    re_path(r'(?P<coursename>[\w.@+-]+)/(?P<videoname>[\w.@+-]+)/',views.viewcourse)
+    path('(?P<username>[\w.@+-]+)/(?P<book_title>[\w.@+-]+)/(?P<status>[\w.@+-]+)/requestbook/',views.requestbook, name='requestbook'),
+    path('view_requests/',views.view_requests, name='view_requests'),
+    path('(?P<book_title>[\w.@+-]+)/(?P<req_id>[\w.@+-]+)/(?P<req_user>[\w.@+-]+)/(?P<username>[\w.@+-]+)/updatet/', views.updatet,name='updatet'),
+    path('(?P<book_title>[\w.@+-]+)/(?P<req_id>[\w.@+-]+)/(?P<req_user>[\w.@+-]+)/(?P<username>[\w.@+-]+)/updatef/', views.updatef,name='updatef'),
+    path('notifications/',views.notifications,name='notifications'),
+    path('notifications/delete/(?P<n_id>[\w.@+-]+)/',views.n_delete,name='n_delete'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-
 
 
