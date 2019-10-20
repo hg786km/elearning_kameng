@@ -13,34 +13,27 @@
     <title>Titlexx</title>
 </head>
 <body>
-<!--{{user}}-->
-<form method="post" enctype="multipart/form-data" class="form-control">
+
+<form method="post" action="">
     {% csrf_token %}
-<!--    Uploaded by :-->
-<!--    <input type="text" name="username" value="{{user.details.username}}" disabled /><br>-->
     Notes_Title :
     <input type="text" name="notes_name"  required /><br>
-    Tags :<br>
-    <input type="radio" name="tags" value="Maths" />Maths<br>
-    <input type="radio" name="tags" value="Science" />Science<br>
-    <input type="radio" name="tags" value="Physics" />Physics<br>
-    <input type="radio" name="tags" value="Data_Structure" />Data Structure<br>
     <br>
-<!--    Author of book :-->
-<!--    <input type="text" name="author_name"  required /><br>-->
+
+
     Upload Notes:
 
-        <input type="file" name="url" >
-<!--        <input type="hidden" name="url" id="url">-->
-<!--        <button type="button" onclick="uploadimage()">Upload</button><br><br>-->
+        <input type="file" name="url" accept = ".pdf">
+
         <br>
 
 
     <input type="submit" value="publish">
+
+</form>
 <br>
-
+</form>
 </body>
-
 
 
 </html>

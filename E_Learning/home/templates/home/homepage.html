@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +8,55 @@
 </head>
 <body>
 {{user.details.username}}<br>
+{{user.details.admin}}<br>
 
-<a href="{% url 'home:add_notes' %}">Add_Notes</a><br>
+{% if user.details.admin == 'Maths' or user.details.admin == 'Science' or user.details.admin == 'Physics' or user.details.admin == 'Data_Structure' %}
+{% endif %}
 
-<a href="{% url 'home:view_notes' %}">View_Notes</a><br>
 
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/add_notes.png' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">Add_Notes</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:add_notes' %}" class="btn btn-primary">Add_Notes</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/view_notes.png' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">View_Notes</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:view_notes' %}" class="btn btn-primary">View_Notes</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+
+<br><br><a href="{% url 'home:viewrequests' %}" >viewrequests</a><br>
+
+
+{% if user.details.admin == 'Cadence' or user.details.admin == 'Montage' or user.details.admin == 'Coding_Club' or user.details.admin == 'Xpression' %}
+{% endif %}
+
+<br><br><a href="{% url 'home:add_club' %}" >add_club</a><br>
+
+
+<br><br><a href="{% url 'home:display_clubs' %}" >display_clubs</a><br>
+
+{% if user.details.admin == 'Maths' or user.details.admin == 'Science' or user.details.admin == 'Physics' or user.details.admin == 'Data_Structure' %}
+{% endif %}
+<br><br><a href="{% url 'home:addbook' %}" >addbook</a><br>
+
+<br><br><a href="{% url 'home:displaybook' %}" >display_book</a><br>
 <a href="{% url 'accounts:logout' %}">logout</a>
 </body>
 </html>
