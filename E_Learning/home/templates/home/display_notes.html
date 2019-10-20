@@ -1,109 +1,126 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<!--        <script type="text/javascript" src="home/search.js"></script>-->
-<!--    <link rel="stylesheet" href="home/search.css">-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-* {
-  box-sizing: border-box;
-}
-
-#myInput {
-  background-image: url('/css/searchicon.png');
-  background-position: 10px 10px;
-  background-repeat: no-repeat;
-  width: 100%;
-  font-size: 16px;
-  padding: 12px 20px 12px 40px;
-  border: 1px solid #ddd;
-  margin-bottom: 12px;
-}
-
-#myTable {
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #ddd;
-  font-size: 18px;
-}
-
-#myTable th, #myTable td {
-  text-align: left;
-  padding: 12px;
-}
-
-#myTable tr {
-  border-bottom: 1px solid #ddd;
-}
-
-#myTable tr.header, #myTable tr:hover {
-  background-color: #f1f1f1;
-}
-</style>
-
-
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
+{{user.details.username}}<br>
+{{user.details.admin}}<br>
 
-<div class="container">
-    <p><h1>NOTES:</h1></p>
-    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
-  <table class="table table-hover" id="myTable">
-    <thead>
-      <tr class="header">
-        <th>Title</th>
-        <th>Tag</th>
-        <th>User</th>
-          <th>Download</th>
-      </tr>
-    </thead>
-    <tbody>
-{% for list_notes,tags,usernames,urls,approved in combine_list  %}
-      <tr>
-          <td>{{tags}}</td>
-        <td>{{list_notes}}</td>
+{% if user.details.admin == 'Maths' or user.details.admin == 'Science' or user.details.admin == 'Physics' or user.details.admin == 'Data_Structure' %}
+{% endif %}
 
-        {% if tags == 'General' and approved == 0 %}
-            <td>{{usernames}}</td>
-            <td>(To be Approved)</td>
-         {% else %}
-            <td>{{usernames}}</td>
-            <td>  <a href = {{urls}}>Download</td>
-          {% endif %}
-      </tr>
-{% endfor %}
-    </tbody>
-  </table>
+
+
+
+<div class="container " >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/add_notes.png' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title" align="center">Add_Notes</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:add_notes' %}" class="btn btn-primary">Add_Notes</a>
+    </div>
+  </div>
+  <br>
 </div>
-<script>
 
-function myFunction() {
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
-</script>
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/view_notes.png' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">View_Notes</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:view_notes' %}" class="btn btn-primary">View_Notes</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/view_requests.jpeg' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">view_requests</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:view_requests' %}" class="btn btn-primary">view_requests</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/notifications.jpg' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">notifications</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:notifications' %}" class="btn btn-primary">notifications</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+{% if user.details.admin == 'Cadence' or user.details.admin == 'Montage' or user.details.admin == 'Coding_Club' or user.details.admin == 'Xpression' %}
+{% endif %}
+
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/add_club.png' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">add_club</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:add_club' %}" class="btn btn-primary">add_club</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/display_clubs.jpg' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">display_clubs</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:display_clubs' %}" class="btn btn-primary">display_clubs</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+
+{% if user.details.admin == 'Maths' or user.details.admin == 'Science' or user.details.admin == 'Physics' or user.details.admin == 'Data_Structure' %}
+{% endif %}
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/addbooks.jpg' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">addbook</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:addbook' %}" class="btn btn-primary">addbook</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+<div class="container" >
+  <div class="card border-dark mb-3" style="width:400px" >
+    <img class="add_notes" src="{% static 'home/displaybook.jpg' %}" alt="Card image" style="width:60%">
+    <div class="card-body">
+      <h4 class="card-title">displaybook</h4>
+      <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+      <a href="{% url 'home:displaybook' %}" class="btn btn-primary">displaybook</a>
+    </div>
+  </div>
+  <br>
+</div>
+
+<a href="{% url 'accounts:logout' %}">logout</a>
 </body>
 </html>
