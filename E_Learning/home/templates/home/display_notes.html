@@ -72,7 +72,6 @@
           <td>{{tags}}</td>
         <td>{{list_notes}}</td>
 
-
         {% if tags == 'General' and approved == 0 %}
             <td>{{usernames}}</td>
             <td>(To be Approved)</td>
@@ -80,15 +79,11 @@
             <td>{{usernames}}</td>
             <td>  <a href = {{urls}}>Download</td>
           {% endif %}
-
       </tr>
 {% endfor %}
     </tbody>
   </table>
 </div>
-<video width="540" height="310" controls="true">
-  <source src="https://www.youtube.com/watch?v=QxtIBQPIhjs" type="video/mp4">
-</video>
 <script>
 
 function myFunction() {
