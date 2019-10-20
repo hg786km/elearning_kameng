@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 import pyrebase
 from django.contrib import auth
-
+from decorators import *
+from functions import *
 
 
 config = {
@@ -20,11 +21,16 @@ authe = firebase.auth()
 database = firebase.database()
 
 def dashboard(request):
+    if user_authenticated(request):
+            user = currentUser(request)
+            return render(request, "home/homepage.html",{"user":user})
     return render(request, "accounts/dashboard.html")
 
 def signup(request):
     if request.method == 'GET':
-        print(1)
+        if user_authenticated(request):
+            user = currentUser(request)
+            return render(request, "home/homepage.html",{"user":user})
         return render(request, "accounts/signup.html")
 
     else:
@@ -54,7 +60,9 @@ def signup(request):
 def login(request):
 
     if request.method == 'GET':
-        print(2)
+        if user_authenticated(request):
+            user = currentUser(request)
+            return render(request, "home/homepage.html",{"user":user})
         return render(request, "accounts/login.html")
 
     else:

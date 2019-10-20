@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
 import pyrebase
 from django.contrib import auth
-
+from functions import *
+from decorators import *
 
 
 config = {
@@ -23,7 +24,7 @@ def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
 
-
+@login_required
 def add_notes(request):
     if request.method == 'GET':
         return render(request, "home/add_notes.html")
@@ -64,7 +65,7 @@ def add_notes(request):
         return render(request, "home/homepage.html")
 
 
-
+@login_required
 def view_notes(request):
     notes = database.child('Notes').shallow().get().val()
     print(notes)
@@ -90,9 +91,8 @@ def view_notes(request):
     combine_list = zip(list_notes,tags,usernames,urls,approved)
     return render(request, "home/display_notes.html", {'combine_list':combine_list})
 
+@login_required
 def add_club(request):
-
-
         if request.method == 'GET':
             return render(request, "home/add_club.html")
 
@@ -130,7 +130,7 @@ def add_club(request):
 
             database.child('Clubs').child(tags).set(data, idtoken)
             return render(request, "home/homepage.html")
-
+@login_required
 def display_clubs(request):
     clubs = database.child('Clubs').shallow().get().val()
     print(clubs)
@@ -151,7 +151,7 @@ def display_clubs(request):
     print(usernames)
     combine_list = zip(list_clubs,usernames,urls,approved)
     return render(request, "home/display_clubs.html", {'combine_list':combine_list})
-
+@login_required
 def addbook(request):
     if request.method =='GET':
         return render(request,"home/addbook.html")
@@ -189,7 +189,7 @@ def addbook(request):
         database.child("books").child(bookname).set(data,idtoken)
         return render(request,"home/homepage.html")
 
-
+@login_required
 def displaybook(request):
     books = database.child('books').shallow().get().val()
 
@@ -215,7 +215,7 @@ def displaybook(request):
 
     combine_list = zip(list_books,tags,usernames,status,emails,approved)
     return render(request, "home/display_books.html", {'combine_list':combine_list})
-
+@login_required
 def requestbook(request,username,book_title):
     try:
             idtoken = request.session['uid']
@@ -234,7 +234,7 @@ def requestbook(request,username,book_title):
     }
     database.child("requests").child(book_title).set(data, idtoken)
     return redirect('home:displaybook')
-      
+@login_required   
 def addcourse(request):
     if request.method == 'GET':
         return render(request, "home/addcourse.html")
@@ -274,7 +274,7 @@ def addcourse(request):
 
         database.child('course').child(course_name).child(video_name).set(data, idtoken)
         return render(request, "home/addcourse.html")
-
+@login_required
 def course_list(request):
     courses = database.child('course').shallow().get().val()
     print(courses)
@@ -289,7 +289,7 @@ def course_list(request):
     print(link_lists)
     combine_list = zip(list_courses,link_lists)
     return render(request, "home/display_courses.html", {'combine_list':combine_list})
-
+@login_required
 def viewcourse(request,coursename,videoname):
     try:
         idtoken = request.session['uid']
@@ -311,7 +311,7 @@ def viewcourse(request,coursename,videoname):
 
     combine_list = zip(videos1,link_list)
     return render(request, "home/video_page.html", {'combine_list':combine_list,"coursetitle":coursename,"videotitle":videoname,"url":url})
-
+@login_required
 def addexternalcourse(request):
     if request.method == 'GET':
         return render(request, "home/addexternalcourses.html")
@@ -347,7 +347,7 @@ def addexternalcourse(request):
 
 
     
-
+@login_required
 def viewrequests(request):
     try:
         idtoken = request.session['uid']
@@ -367,7 +367,7 @@ def viewrequests(request):
     combine_list = zip(all_requested_users)
     return render(request, "home/viewrequests.html", {'combine_list': combine_list})
 
-
+@login_required
 def external_course_list(request):  
     try:
         idtoken = request.session['uid']
