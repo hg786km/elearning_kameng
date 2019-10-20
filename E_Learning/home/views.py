@@ -51,7 +51,7 @@ def dashboard(request):
 
 def add_notes(request):
     if request.method == 'GET':
-        return render(request, "home/add_notes.html")
+        return render(request, "home/temp.html")
 
     else:
         notes_name = request.POST.get('notes_name')
@@ -70,11 +70,12 @@ def add_notes(request):
         except:
             return render(request, "accounts/login.html")
 
-        # storage = firebase.storage()
+        storage = firebase.storage()
+        url = str(url)
         # data1 = {
         #     "url": url,
         # }
-        # storage.child("images/bank-details.jpg").put("bank-details.jpg")
+        storage.child("images"+url).put(url)
 
         username = database.child("users").child(a).child("details").child("username").get(idtoken).val()
         #print(username)
