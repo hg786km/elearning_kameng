@@ -18,8 +18,10 @@
     {% csrf_token %}
 <!--    Uploaded by :-->
 <!--    <input type="text" name="username" value="{{user.details.username}}" disabled /><br>-->
-    Notes_Title :
-    <input type="text" name="notes_name"  required /><br>
+    Course_Title :
+    <input type="text" name="course_name"  required /><br>
+    Video_Title :
+    <input type="text" name="video_name"  required /><br>
     Tags :<br>
     <input type="radio" name="tags" value="Maths" />Maths<br>
     <input type="radio" name="tags" value="Science" />Science<br>
@@ -28,17 +30,18 @@
     <br>
 <!--    Author of book :-->
 <!--    <input type="text" name="author_name"  required /><br>-->
-    Upload Notes:
+    Upload Video:
 
-        <input type="file" name="url" accept = ".pdf">
+        <input type="file" name="url" accept=".mp4" >
 <!--        <input type="hidden" name="url" id="url">-->
 <!--        <button type="button" onclick="uploadimage()">Upload</button><br><br>-->
         <br>
 
 
-    <input type="submit" value="publish">
+    <input type="submit" value="publish"> 
+ </form>   
 <br>
-</form>
+
 </body>
 
 

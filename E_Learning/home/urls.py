@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 app_name = "home"
@@ -16,6 +16,12 @@ urlpatterns = [
    #path('searchbooks/',views.searchbooks,name='search')
    #path('listbooks/',views.listbooks,name='postsearch')
     #path('deletebooks/')
+    path('addcourse/',views.addcourse,name='addcourse'),
+    path('course_list/',views.course_list,name='course_list'),
+    path('addextcourse/',views.addexternalcourse,name='addextcourse'),
+    path('extcourse_list/',views.external_course_list,name='extcourse_list'),
+    re_path(r'(?P<coursename>[\w.@+-]+)/(?P<videoname>[\w.@+-]+)/',views.viewcourse)
+
 ]
 
 
